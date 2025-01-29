@@ -21,16 +21,13 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    
     //     // 사용자 추가
     // @PostMapping
     // public User addUser(@RequestBody User user) {
     //     return userService.addUser(user);
     // }
     
-    @GetMapping("/")
-    public String index(){
-        return "index";
-    }
 
     // 모든 사용자 목록 조회
     @GetMapping("/users")
