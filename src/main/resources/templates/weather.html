@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .weather-icon {
+            width: 50px;
+            height: 50px;
+        }
+        .weather-container {
+            text-align: center;
+        }
+        .weather-info {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+        <div class="weather-container mt-5">
+            <h2 class="mt-5">Weather Information for <span th:text="${city}">City</span>:</h2>
+            
+            <!-- 날씨 아이콘과 함께 표시 -->
+            <div class="d-flex justify-content-center">
+                <img th:src="'https://openweathermap.org/img/wn/' + ${weatherIcon} + '.png'" class="weather-icon" alt="Weather Icon">
+            </div>
+            <p class="weather-info" th:text="${weatherInfo}">Weather information will be displayed here...</p>
+        </div>
+    </div>
+</body>
+</html>
