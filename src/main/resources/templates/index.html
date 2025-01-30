@@ -7,18 +7,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        .python-result {
-            background-color : #f8f9fa;
-            padding: 20px;
-            border-left: 2px solid #ccc;
+        /* 전체 페이지에 대한 스타일 설정 */
+        html, body {
             height: 100%;
-            overflow-y: auto;
-            position: fixed;
-            right: 0;
-            top: 50px;
-            width: 30%;
-            z-index: 100;
+            margin: 0;
         }
+
+        /* 메뉴를 상단에 고정시키기 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        /* 콘텐츠를 중앙에 배치 */
+        .container {
+            display: flex; /* Flexbox 레이아웃 활성화 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: flex-start; /* 세로 상단 정렬 */
+            height: calc(100vh - 100px); /* 화면 전체 높이에서 메뉴 영역만큼 뺀 값 */
+            padding-top: 80px; /* 메뉴 아래로 여백 추가 */
+        }
+
+        /* 왼쪽 콘텐츠 (기존 콘텐츠) */
+        .content-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            margin-right: 50px;  /* 오른쪽 콘텐츠와 간격 추가 */
+        }
+
+        /* 오른쪽 콘텐츠 (Python 실행 결과) */
+        .content-right {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 2px solid #ccc;
+            width: 100%;
+            max-width: 600px;  /* 최대 너비 설정 */
+            text-align: center;
+        }
+
         pre {
             background: #f5f5f5;
             padding: 10px;
@@ -29,27 +63,37 @@
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-between"> <!-- 양 끝에 배치 -->
-            <!-- 왼쪽: 기존 콘텐츠 -->
-            <div class="col-md-8">
-                <h1 class="text-center">Welcome to the Spring Boot Application!</h1>
-                <p class="text-center">This is the index page.</p>
-                <div class="text-center">
-                    <a href="/users" class="btn btn-primary">Go to User List</a>
-                </div>
-                <div class="text-center mt-3">
-                    <a href="/user/create" class="btn btn-success">Go to User Registration</a>
-                </div>
+    <!-- 상단 메뉴 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Spring Boot Application</a>
+            <div class="collapse navbar-collapse justify-content-center">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/users">Go to User List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/create">Go to User Registration</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </nav>
 
-            <!-- 오른쪽: Python 실행 결과 -->
-            <div class="python-result">
-                <h2 class="text-center">Python Execution Result</h2>
-                <input type="text" id="nameInput" class="form-control mb-2" placeholder="Enter name (default: TestWorld)">
-                <button id="runPythonBtn" class="btn btn-primary w-100">Run Python Script</button>
-                <pre id="pythonOutput">Click the button to execute Python script...!!!!!</pre>
-            </div>
+    <!-- 메인 콘텐츠 -->
+    <div class="container">
+        <!-- 기존 콘텐츠 (왼쪽) -->
+        <div class="content-left">
+            <h1>Welcome to the Spring Boot Application!</h1>
+            <p>This is the index page.</p>
+        </div>
+
+        <!-- Python 실행 결과 (오른쪽) -->
+        <div class="content-right">
+            <h2 class="text-center">Python Execution Result</h2>
+            <input type="text" id="nameInput" class="form-control mb-2" placeholder="Enter name (default: TestWorld)">
+            <button id="runPythonBtn" class="btn btn-primary w-100">Run Python Script</button>
+            <pre id="pythonOutput">Click the button to execute Python script...!!!!!</pre>
         </div>
     </div>
 
@@ -66,7 +110,6 @@
         });
     </script>
 
-</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
