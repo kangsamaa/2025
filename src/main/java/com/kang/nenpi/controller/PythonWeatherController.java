@@ -1,5 +1,7 @@
 package com.kang.nenpi.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,13 +14,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class PythonWeatherController {
-    
+
     @Autowired
     private PythonTenkiService pythonTenkiService;
 
     @Autowired
     private PythonGetIpService pythonGetIpService;
-  
+
     @GetMapping("/weather")
     public String getWeather(HttpServletRequest request, Model model) {
         // 1. IP 주소로 도시명 추출
@@ -33,6 +35,7 @@ public class PythonWeatherController {
 
         //Model Icon Add
         String weatherIcon = "01d";
+        
 
         // 결과를 모델에 추가하여 화면에 전달
         model.addAttribute("weatherInfo", weatherInfo);

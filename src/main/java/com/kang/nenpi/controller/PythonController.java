@@ -21,7 +21,7 @@ public class PythonController {
 
     //python test run
     @GetMapping("/run")
-    public String executePythonScript(@RequestParam(value = "name") String name) {
+    public String executePythonScript(@RequestParam(value = "name", defaultValue="hello world") String name) {
         return pythonService.runPythonScript(name);
     }
 }
