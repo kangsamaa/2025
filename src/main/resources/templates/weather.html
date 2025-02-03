@@ -1,6 +1,6 @@
 <!-- Weather Fragment -->
 <div th:fragment="weather" class="weather-container">
-    <h2>Weather Information for <span th:text="${city}">City</span></h2>
+    <h2>本日の天気 地域： <span th:text="${city}">City</span> <span th:text="${region}"></span></h2>
     
     <div class="d-flex justify-content-center">
         <img th:src="'https://openweathermap.org/img/wn/' + ${weatherIcon} + '.png'" class="weather-icon" alt="Weather Icon">

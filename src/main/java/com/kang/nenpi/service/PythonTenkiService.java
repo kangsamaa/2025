@@ -49,8 +49,6 @@ public class PythonTenkiService {
             // String description = weather.get("description").asText();
             String desc2 = weather.get("main").asText();
 
-            System.out.println(weather + " " + desc2); //tenki test code
-
             //일본어로 번역하기
             String weatherJP = WEATHER_TRANSLATIONS.getOrDefault(desc2, "error");
 
