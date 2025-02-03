@@ -1,5 +1,6 @@
 package com.kang.nenpi.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +35,20 @@ public class PythonWeatherController {
         String city = location.getRegionName();
         String cityKanji = JapanPrefecture.getKanjiByEnglish(city);
         System.out.println(city + " " + region);
-        // 2. 도시명을 이용해 날씨 정보 가져오기
-        String weatherInfo = pythonTenkiService.getWeather(city);
 
-        // 3. 지명을 이용해 날씨정보 가져오기
-        String weatherRegion = pythonTenkiService.getWeather(region);
+        List<String> weatherForecast = pythonTenkiService.getWeather(region);
+        // // 2. 도시명을 이용해 날씨 정보 가져오기
+        // String weatherInfo = pythonTenkiService.getWeather(city);
+
+        // // 3. 지명을 이용해 날씨정보 가져오기
+        // String weatherRegion = pythonTenkiService.getWeather(region);
 
         //Model Icon Add
         String weatherIcon = "01d";
         
 
         // 결과를 모델에 추가하여 화면에 전달
-        model.addAttribute("weatherInfo", weatherRegion);
+        model.addAttribute("weatherInfo", weatherForecast);
         model.addAttribute("city", cityKanji); //kanji로 표시하기
         model.addAttribute("weatherIcon", weatherIcon);
         model.addAttribute("ip", clientIp); //표시는 0.0.0.0으로 톰캣으로 하고있으니까

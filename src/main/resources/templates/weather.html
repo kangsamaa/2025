@@ -5,6 +5,8 @@
     <div class="d-flex justify-content-center">
         <img th:src="'https://openweathermap.org/img/wn/' + ${weatherIcon} + '.png'" class="weather-icon" alt="Weather Icon">
     </div>
-    
-    <p class="weather-info" th:text="${weatherInfo}">Weather information will be displayed here...</p>
+        <h2 class="text-center">3日間の天気予報</h2>
+        <ul>
+            <li th:each="weather : ${weatherInfo}" th:text="${weather}"></li>
+        </ul>
 </div>

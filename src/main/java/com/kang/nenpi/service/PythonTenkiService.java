@@ -1,5 +1,7 @@
 package com.kang.nenpi.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,32 +35,48 @@ public class PythonTenkiService {
         Map.entry("Smoke", "雲")
     );
 
-
-    public String getWeather(String city) {
-        String openWeatherMapUrl = String.format("http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric", city, openWeatherMapApiKey);
+    public List<String> getWeather(String city) {
+        String openWeatherMapUrl = String.format("http://api.openweathermap.org/data/2.5/forecast?q=%s&appid=%s&units=metric&lang=ja", city, openWeatherMapApiKey);
         String response = restTemplate.getForObject(openWeatherMapUrl, String.class);
+        
+        List<String> weatherList = new ArrayList<>();
+        
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode root = objectMapper.readTree(response);
-            JsonNode main = root.get("main");
-            JsonNode weather = root.get("weather").get(0);
-            // JsonNode testkumo = weather.get("weather.main").get(0);
+
+            JsonNode list = root.get("list");
+
+            for(JsonNode node : list){
+                String dateTime = node.get("dt_txt").asText();
+                String temp = node.get("main").get("temp").asText();
+                String description = node.get("weather").get(0).get("description").asText();
+
+                weatherList.add(dateTime + " - " + temp + "°C - " + description);
+
+                if(weatherList.size() >= 24){
+                    break;
+                }
+            }
+
+            // JsonNode main = root.get("main");
+            // JsonNode weather = root.get("weather").get(0);
+            // // JsonNode testkumo = weather.get("weather.main").get(0);
             
-            String temperature = main.get("temp").asText();
-            // String description = weather.get("description").asText();
-            String desc2 = weather.get("main").asText();
+            // String temperature = main.get("temp").asText();
+            // // String description = weather.get("description").asText();
+            // String desc2 = weather.get("main").asText();
 
-            //일본어로 번역하기
-            String weatherJP = WEATHER_TRANSLATIONS.getOrDefault(desc2, "error");
+            // //일본어로 번역하기
+            // String weatherJP = WEATHER_TRANSLATIONS.getOrDefault(desc2, "error");
 
-            //weatherinfo의 json에서 날씨의 값을 가지고 와서 변환을 해주면될듯
-
-            return String.format("気温: %s°C, 天気: %s", temperature, weatherJP);
+            // //weatherinfo의 json에서 날씨의 값을 가지고 와서 변환을 해주면될듯
         } catch (Exception e) {
             e.printStackTrace();
-            return "Unable to fetch weather data";
+            weatherList.add("fail");
         }
+        return weatherList;
     }
-    
+
 }
