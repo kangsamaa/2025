@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.kang.nenpi.entity.IpLocationResponse;
+import com.kang.nenpi.entity.WeatherResponse;
 import com.kang.nenpi.enums.JapanPrefecture;
 import com.kang.nenpi.service.PythonGetIpService;
 import com.kang.nenpi.service.PythonTenkiService;
@@ -28,7 +29,7 @@ public class PythonWeatherController {
     public String getWeather(HttpServletRequest request, Model model) {
         // 1. IP 주소로 도시명 추출
         String clientIp = request.getRemoteAddr();
-        String testIp = "126.25.132.156";
+        String testIp = "126.25.132.156"; //현재는 테스트 ip로만 구현 서비스할때에 ip를 가져와서 하자 clienIp로
         IpLocationResponse location = pythonGetIpService.getLocationByIp(testIp);
 
         String region = location.getCity();
@@ -36,21 +37,17 @@ public class PythonWeatherController {
         String cityKanji = JapanPrefecture.getKanjiByEnglish(city);
         System.out.println(city + " " + region);
 
-        List<String> weatherForecast = pythonTenkiService.getWeather(region);
+        List<WeatherResponse> forecastWeather = pythonTenkiService.getWeather(city);
+
         // // 2. 도시명을 이용해 날씨 정보 가져오기
         // String weatherInfo = pythonTenkiService.getWeather(city);
 
         // // 3. 지명을 이용해 날씨정보 가져오기
         // String weatherRegion = pythonTenkiService.getWeather(region);
 
-        //Model Icon Add
-        String weatherIcon = "01d";
-        
-
         // 결과를 모델에 추가하여 화면에 전달
-        model.addAttribute("weatherInfo", weatherForecast);
+        model.addAttribute("forecastWeather", forecastWeather);
         model.addAttribute("city", cityKanji); //kanji로 표시하기
-        model.addAttribute("weatherIcon", weatherIcon);
         model.addAttribute("ip", clientIp); //표시는 0.0.0.0으로 톰캣으로 하고있으니까
         model.addAttribute("region", region);
         return "weather";  // Thymeleaf 템플릿 (weather.html)
