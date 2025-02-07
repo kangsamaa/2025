@@ -4,42 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Spring Boot</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
-        /* 전체 페이지에 대한 스타일 설정 */
+        /* 전체 페이지 스타일 */
         html, body {
             height: 100%;
             margin: 0;
         }
 
-        /* 콘텐츠를 중앙에 배치 */
+        /* 좌우 레이아웃 정렬 */
         .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding-top: 150px;
+            margin-top: 50px;
+        }
+
+        .content-left, .content-right {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
         }
 
         .content-left {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            max-width: 900px;
-            width: 100%;
-            margin-bottom: 50px;
+            background-color: #f8f9fa; /* 연한 파란색 */
+            margin-top: 17px;
+            border: 2px solid #ccc;
         }
 
         .content-right {
-            background-color: #f8f9fa;
-            padding: 20px;
+            background-color: #f8f9fa; /* 연한 회색 */
             border: 2px solid #ccc;
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
+        }
+
+        .weather-icon {
+            width: 59px;
+            height: 59px;
         }
 
         pre {
@@ -52,30 +53,50 @@
     </style>
 </head>
 <body>
-    <!-- 상단 메뉴를 이곳에 포함 -->
+    <!-- 상단 메뉴 -->
     <div th:replace="~{fragments/header}"></div>
 
     <!-- 메인 콘텐츠 -->
     <div class="container">
-        <div class="content-left">
-            <h1>Welcome to the Spring Boot Application!</h1>
-            <p>This is the index page.</p>
-        </div>
+        <div class="row">
+            <!-- 왼쪽 영역 -->
+            <div class="col-md-6">
+                <div class="content-left">
+                    <h1>燃費予測をしましょう！</h1>
+                    <p>This is the index page.</p>
+                </div>
+            </div>
 
-        <div class="content-right">
-            <h2 class="text-center">Python Execution Result</h2>
-            <input type="text" id="nameInput" class="form-control mb-2" placeholder="Enter name (default: TestWorld)">
-            <button id="runPythonBtn" class="btn btn-primary w-100">Run Python Script</button>
-            <pre id="pythonOutput">Click the button to execute Python script...!!!!!</pre>
+            <!-- 오른쪽 영역 -->
+            <div class="col-md-6">
+                <!-- Python 실행 결과 -->
+
+                <!-- 날씨 정보 -->
+                <div class="content-right mt-3">
+                    <div id="weather-container">
+                        <p>データ読み込み中</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- jQuery AJAX -->
     <script>
-        // Python 실행 버튼 클릭 이벤트
-        $("#runPythonBtn").click(function () {
-            let name = $("#nameInput").val();
-            $.get("/api/python/run", { name: name }, function (data) {
-                $("#pythonOutput").html(data);
+        $(document).ready(function() {
+            // Python 실행 버튼 클릭 이벤트
+            $("#runPythonBtn").click(function () {
+                let name = $("#nameInput").val();
+                $.get("/api/python/run", { name: name }, function (data) {
+                    $("#pythonOutput").html(data);
+                });
+            });
+
+            // 날씨 정보 가져오기
+            $.get("/weather", function(data) {
+                $("#weather-container").html(data);  // `weather.html`의 내용을 동적으로 삽입
+            }).fail(function() {
+                $("#weather-container").html("<p>Failed to load weather data.</p>");
             });
         });
     </script>

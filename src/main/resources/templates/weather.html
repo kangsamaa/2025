@@ -1,0 +1,24 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/weather.css">
+</head>
+
+<!-- Weather Fragment -->
+<div th:fragment="weather" class="weather-container">
+    <h2>本日の天気 地域： <span th:text="${city}">City</span> <span th:text="${region}"></span></h2>
+    
+    <!-- 현재 날씨 -->
+
+    <!-- 3일간의 날씨 예보 -->
+    <h2 class="text-center">3日間の天気予報</h2>
+    <div class="forecast-weather">
+        <ul>
+            <li th:each="weather : ${forecastWeather}">
+                <p><b th:text="${weather.date}"></b></p>
+                <img th:src="'https://openweathermap.org/img/wn/' + ${weather.icon} + '.png'" class="weather-icon">
+                <p><span th:text="${weather.temp}"></span></p>
+                <p><span th:text="${weather.description}"></span></p>
+            </li>
+        </ul>
+    </div>
+</div>
+
