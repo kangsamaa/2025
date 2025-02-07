@@ -35,7 +35,7 @@ public class PythonWeatherController {
         String region = location.getCity();
         String city = location.getRegionName();
         String cityKanji = JapanPrefecture.getKanjiByEnglish(city);
-        System.out.println(city + " " + region);
+        // System.out.println(city + " " + region);
 
         List<WeatherResponse> forecastWeather = pythonTenkiService.getWeather(city);
 

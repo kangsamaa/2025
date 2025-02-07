@@ -18,7 +18,7 @@ public class IndexController {
         if(clientIp == null){
             clientIp = request.getRemoteAddr();
         }
-        System.out.println(clientIp);
+        // System.out.println(clientIp);
         return "index";
     }
 }
