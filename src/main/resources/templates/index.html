@@ -16,39 +16,24 @@
             margin: 0;
         }
 
-        /* 좌우 레이아웃 정렬 */
         .container {
             margin-top: 50px;
         }
 
-        .content-left, .content-right {
+        .content-box {
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-        }
-
-        .content-left {
-            background-color: #f8f9fa; /* 연한 파란색 */
-            margin-top: 17px;
             border: 2px solid #ccc;
+            background-color: #f8f9fa;
         }
 
-        .content-right {
-            background-color: #f8f9fa; /* 연한 회색 */
-            border: 2px solid #ccc;
+        .hidden {
+            display: none;
         }
 
-        .weather-icon {
-            width: 59px;
-            height: 59px;
-        }
-
-        pre {
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        .alert-danger {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -59,20 +44,32 @@
     <!-- 메인 콘텐츠 -->
     <div class="container">
         <div class="row">
-            <!-- 왼쪽 영역 -->
+            <!-- 로그인 / 회원가입 영역 -->
             <div class="col-md-6">
-                <div class="content-left">
-                    <h1>燃費予測をしましょう！</h1>
-                    <p>This is the index page.</p>
+                <div class="content-box" id="auth-container">
+                    <!-- 로그인 폼 -->
+                    <div id="login-form">
+                        <h2>ログイン</h2>
+                        <input type="text" class="form-control mb-2" id="login-username" placeholder="ユーザー名">
+                        <input type="password" class="form-control mb-2" id="login-password" placeholder="パスワード">
+                        <button class="btn btn-primary" id="login-btn">ログイン</button>
+                        <!-- 로그인 실패 시 표시할 메시지 -->
+                        <p id="login-error" class="text-danger mt-3 hidden">
+                            ログインに失敗しました。ユーザー名またはパスワードが正しくありません。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 로그인 성공 시 표시 -->
+                <div class="content-box hidden" id="welcome-container">
+                    <h2 id="welcome-message"></h2>
+                    <button class="btn btn-danger" id="logout-btn">ログアウト</button>
                 </div>
             </div>
 
-            <!-- 오른쪽 영역 -->
+            <!-- 날씨 정보 -->
             <div class="col-md-6">
-                <!-- Python 실행 결과 -->
-
-                <!-- 날씨 정보 -->
-                <div class="content-right mt-3">
+                <div class="content-box">
                     <div id="weather-container">
                         <p>データ読み込み中</p>
                     </div>
@@ -84,17 +81,57 @@
     <!-- jQuery AJAX -->
     <script>
         $(document).ready(function() {
-            // Python 실행 버튼 클릭 이벤트
-            $("#runPythonBtn").click(function () {
-                let name = $("#nameInput").val();
-                $.get("/api/python/run", { name: name }, function (data) {
-                    $("#pythonOutput").html(data);
+            // 로그인 상태 확인
+            checkSession();
+        
+            // 로그인 버튼 클릭
+            $("#login-btn").click(function() {
+                let username = $("#login-username").val();
+                let password = $("#login-password").val();
+        
+                $.post("/auth/login", { username: username, password: password }, function(response) {
+                    if (response.status === "success") {
+                        showWelcome(username);
+                    } else {
+                        // 로그인 실패 시 오류 메시지 표시
+                        $("#login-error").removeClass("hidden");
+                        $("#login-error").text(response.message);
+                    }
+                }).fail(function() {
+                    // 로그인 실패 시 기본 오류 메시지 표시
+                    $("#login-error").removeClass("hidden");
+                    $("#login-error").text("サーバーエラーが発生しました。再度お試しください。");
                 });
             });
-
+        
+            // 로그아웃 버튼 클릭
+            $("#logout-btn").click(function() {
+                $.post("/auth/logout", function() {
+                    $("#welcome-container").hide();
+                    $("#auth-container").show();
+                    $("#login-username, #login-password").val("");
+                });
+            });
+        
+            // 세션 확인 함수
+            function checkSession() {
+                $.get("/auth/session", function(data) {
+                    if (data.loggedIn) {
+                        showWelcome(data.username);
+                    }
+                });
+            }
+        
+            // 로그인 성공 시 UI 변경
+            function showWelcome(username) {
+                $("#auth-container").hide();
+                $("#welcome-container").show();
+                $("#welcome-message").text(username + " さん、ようこそ！");
+            }
+        
             // 날씨 정보 가져오기
             $.get("/weather", function(data) {
-                $("#weather-container").html(data);  // `weather.html`의 내용을 동적으로 삽입
+                $("#weather-container").html(data);
             }).fail(function() {
                 $("#weather-container").html("<p>Failed to load weather data.</p>");
             });

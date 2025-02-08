@@ -1,6 +1,7 @@
 package com.kang.nenpi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,5 +32,14 @@ public class UserService {
         // 데이터 확인용 로그 출력
         // System.out.println("Users: " + users);
         return users;
+    }
+
+    public User findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.orElse(null);  // 사용자가 없으면 null 반환
+    }
+
+    public boolean checkPassword(User user, String rawPassword) {
+        return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 }
