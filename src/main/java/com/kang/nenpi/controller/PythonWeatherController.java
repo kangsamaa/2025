@@ -30,10 +30,14 @@ public class PythonWeatherController {
         // 1. IP 주소로 도시명 추출
         String clientIp = request.getRemoteAddr();
         String testIp = "126.25.132.156"; //현재는 테스트 ip로만 구현 서비스할때에 ip를 가져와서 하자 clienIp로
-        IpLocationResponse location = pythonGetIpService.getLocationByIp(testIp);
+        // IpLocationResponse location = pythonGetIpService.getLocationByIp(testIp); //location 갑자기 에러가남
 
-        String region = location.getCity();
-        String city = location.getRegionName();
+        // String region = location.getCity();//나중에 변경?
+        // String city = location.getRegionName(); //나중에 변경?
+        
+        // -- 패치해야함 IPservice작동안함
+        String city = "Fukuoka";
+        String region = "Hirokawa";
         String cityKanji = JapanPrefecture.getKanjiByEnglish(city);
         // System.out.println(city + " " + region);
 
